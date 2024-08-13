@@ -1,0 +1,82 @@
+.slottedtable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.slottedtable .header,
+.slottedtable .body {
+  display: table;
+  width: 100%;
+}
+
+.slottedtable .row {
+  display: table-row;
+  background-color: white;
+  color: black;
+}
+
+.slottedtable .cell {
+  display: table-cell;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+.slottedtable .footer {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  justify-content: flex-end;
+  margin-top: 1em;
+  align-items: center;
+}
+
+.slottedtable .pageselector {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+}
+
+.pageselector .select {
+  display: inline-block;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  border-radius: 15px;
+  font-size: 14px;
+}
+
+.slottedtable .pagebtns {
+  display: flex;
+  flex-direction: row;
+}
+
+.pagebtns button {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid gray;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.pagebtns .active {
+  font-weight: bold;
+  background-color: green;
+  color: white;
+}
+
+.slottedtable .pointer {
+  cursor: pointer;
+}

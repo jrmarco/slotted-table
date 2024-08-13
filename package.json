@@ -1,0 +1,44 @@
+{
+  "name": "slotted-table",
+  "version": "1.0.0-beta",
+  "description": "Data table with slots ready made with Vue.js 3.x ready to use",
+  "main": "dist/slotted-table.umd.js",
+  "type": "module",
+  "module": "dist/slotted-table.es.js",
+  "types": "./types/main.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "format": "prettier --write src/",
+    "lint": "npx eslint --fix --ignore-pattern dist"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Marco Grossi",
+    "email": "developer@bigm.it",
+    "url": "https://github.com/jrmarco"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jrmarco/slotted-table.git"
+  },
+  "license": "GPLv3",
+  "dependencies": {
+    "vue": "^3.4.35"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "eslint": "^9.8.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "globals": "^15.9.0",
+    "prettier": "^3.3.3",
+    "typescript-eslint": "^8.0.0",
+    "vite": "^5.3.5",
+    "vue-loader": "^17.3.1"
+  }
+}
