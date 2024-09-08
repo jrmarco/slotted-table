@@ -1,7 +1,12 @@
 <template>
   <div :class="computedPageSelectorClass">
     {{ trs["rowsPerPage"] }}
-    <select class="select" v-model="rowsPerPage" @change="setPage(1)">
+    <select
+      name="st-rows-per-page-selector"
+      class="st-select"
+      v-model="rowsPerPage"
+      @change="setPage(1)"
+    >
       <option
         v-for="option in rowsPerPageOptions"
         :key="option"
@@ -18,7 +23,7 @@
     <template v-for="pageNum in pages" :key="pageNum">
       <button
         v-if="typeof pageNum === 'number'"
-        :class="{ active: Number(pageNum) === Number(page) }"
+        :class="{ 'st-active': Number(pageNum) === Number(page) }"
         @click="setPage(pageNum)"
       >
         {{ pageNum }}
@@ -77,16 +82,16 @@ const page = computed(() => store.value.page);
 const setPage = async (pageNum: number) => {
   if (!Number.isInteger(pageNum) || pageNum < 1) return;
   store.value.page = pageNum;
-  emit("update");
+  emit("update", { clearSelected: true });
 };
 
 const trs = computed(() => store.value.trs);
 
 const computedPageSelectorClass = computed(() => {
-  return ["pageselector", sharedFunctions.getStyle("pageselector")];
+  return ["st-pageselector", sharedFunctions.getStyle("pageselector")];
 });
 
 const computedPageButtonsClass = computed(() => {
-  return ["pagebtns", sharedFunctions.getStyle("pagebtns")];
+  return ["st-pagebtns", sharedFunctions.getStyle("pagebtns")];
 });
 </script>

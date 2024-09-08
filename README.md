@@ -54,13 +54,15 @@ Use `SlottedTable` in your Vue components as follows:
     :headers="headers"
     :items="items"
   >
+    <template v-slot:COLUMN_NAME="{ column, cellData, data }">
+      <!-- Execute custom data manipulation 
+        column: contains the column name
+        cellData: contains row column value
+        data: contains row full data
+      -->
+    </template>
     <template v-slot="{ column, cellData, data }">
-      <div v-if="column === COLUMN_NAME">
-        <!-- Execute custom data manipulation -->
-      </div>
-      <div v-else>
-        {{ cellData }}
-      </div>
+      <!-- Execute default data manipulation -->
     </template>
   </SlottedTable>
 </template>

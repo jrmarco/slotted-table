@@ -16,6 +16,12 @@ const store = ref<Store>({
   rowsPerPage: 10,
   totalItems: 0,
   styles: {} as Styles,
+  filters: [],
+  prevFilters: [],
+  selection: [],
+  selector: false,
+  selectorColIdentifier: "",
+  allSelected: false,
 });
 
 export default store;

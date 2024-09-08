@@ -3,19 +3,19 @@
   border-collapse: collapse;
 }
 
-.slottedtable .header,
-.slottedtable .body {
+.slottedtable .st-header,
+.slottedtable .st-body {
   display: table;
   width: 100%;
 }
 
-.slottedtable .row {
+.slottedtable .st-row {
   display: table-row;
   background-color: white;
   color: black;
 }
 
-.slottedtable .cell {
+.slottedtable .st-cell {
   display: table-cell;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
@@ -23,7 +23,7 @@
   text-align: center;
 }
 
-.slottedtable .footer {
+.slottedtable .st-footer {
   display: flex;
   flex-direction: row;
   gap: 1em;
@@ -32,14 +32,14 @@
   align-items: center;
 }
 
-.slottedtable .pageselector {
+.slottedtable .st-pageselector {
   display: flex;
   flex-direction: row;
   gap: 1em;
   align-items: center;
 }
 
-.pageselector .select {
+.slottedtable .st-pageselector .st-select {
   display: inline-block;
   background-color: white;
   color: black;
@@ -53,12 +53,12 @@
   font-size: 14px;
 }
 
-.slottedtable .pagebtns {
+.slottedtable .st-pagebtns {
   display: flex;
   flex-direction: row;
 }
 
-.pagebtns button {
+.slottedtable .st-pagebtns button {
   display: inline-block;
   padding: 5px 10px;
   border: 1px solid gray;
@@ -71,12 +71,56 @@
   background-color: white;
 }
 
-.pagebtns .active {
+.slottedtable .st-pagebtns .st-active {
   font-weight: bold;
   background-color: green;
   color: white;
 }
 
-.slottedtable .pointer {
+.slottedtable .st-pointer {
   cursor: pointer;
+}
+
+.slottedtable .st-filtercontainer {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 1em;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slottedtable .st-filteractions {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  padding-bottom: 1em;
+}
+
+.slottedtable .st-activefilter {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.slottedtable .st-activefilter > button {
+  padding: 5px 10px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.slottedtable .st-searchbutton {
+  margin-left: 5px;
+}
+
+.slottedtable .st-bulkactions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  flex-wrap: nowrap;
+  gap: 1em;
 }

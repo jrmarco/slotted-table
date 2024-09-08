@@ -2,7 +2,6 @@
 import SlottedTable from "./SlottedTable.vue";
 
 const headers = [
-  { text: "", value: "selector", sortable: false, width: 20 },
   { text: "SKU", value: "sku", sortable: true },
   { text: "Name", value: "name", sortable: true },
   { text: "Link", value: "link", sortable: false, empty: "No link" },
@@ -155,27 +154,25 @@ const serverMimic = () => {
 <template>
   <h1>Slotted table sample</h1>
   <SlottedTable :headers="headers" :items="items" :callback="serverMimic">
-    <template v-slot="{ column, cellData, data }">
-      <template v-if="column === 'selector'">
-        <input type="checkbox" :id="data.id" />
-      </template>
-      <template v-else-if="column === 'action'">
-        <button @click="rowDetails(data)">Trigger</button>
-      </template>
-      <template v-else-if="column === 'description'">
-        <a :title="data.description_full">{{ cellData }}</a>
-      </template>
-      <template v-else-if="column === 'link'">
-        <a
-          :href="cellData !== 'No link' ? cellData : '#'"
-          :target="cellData !== 'No link' ? '_blank' : ''"
-        >
-          {{ data.linkText || cellData }}
-        </a>
-      </template>
-      <template v-else>
-        {{ cellData }}
-      </template>
+    <template v-slot:selector="{ data }">
+      <input type="checkbox" :id="data.id" />
+    </template>
+    <template v-slot:action="{ data }">
+      <button @click="rowDetails(data)">Trigger</button>
+    </template>
+    <template v-slot:description="{ cellData, data }">
+      <a :title="data.description_full">{{ cellData }}</a>
+    </template>
+    <template v-slot:link="{ cellData, data }">
+      <a
+        :href="cellData !== 'No link' ? cellData : '#'"
+        :target="cellData !== 'No link' ? '_blank' : ''"
+      >
+        {{ data.linkText || cellData }}
+      </a>
+    </template>
+    <template v-slot="{ cellData }">
+      {{ cellData }}
     </template>
   </SlottedTable>
 </template>

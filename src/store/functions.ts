@@ -23,6 +23,11 @@ const getStyle = (targetName: string) => {
       "cell",
       "pageselector",
       "pagebtns",
+      "filter",
+      "filteractions",
+      "activefilter",
+      "searchbutton",
+      "filterbutton",
     ].includes(key);
   }
 
