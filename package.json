@@ -1,6 +1,6 @@
 {
   "name": "slotted-table",
-  "version": "1.0.1-beta",
+  "version": "1.0.0",
   "description": "Data table with slots ready made with Vue.js 3.x ready to use",
   "main": "dist/slotted-table.umd.js",
   "type": "module",
