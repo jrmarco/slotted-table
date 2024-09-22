@@ -1,9 +1,9 @@
 import { ref } from "vue";
-import type { Store, Styles, Translations } from "../../types/main";
+import type { Store, TStyles, TTranslations } from "../../types/main";
 
 const store = ref<Store>({
   language: "en",
-  trs: {} as Translations,
+  trs: {} as TTranslations,
   loading: true,
   columns: [],
   ordering: {
@@ -14,14 +14,24 @@ const store = ref<Store>({
   endIndex: 1,
   page: 1,
   rowsPerPage: 10,
-  totalItems: 0,
-  styles: {} as Styles,
+  styles: {} as TStyles,
   filters: [],
   prevFilters: [],
-  selection: [],
-  selector: false,
+  hasCheckboxSelector: false,
   selectorColIdentifier: "",
   allSelected: false,
+  checkboxes: {},
+  hasServerCallback: false,
+  dynamicRows: {
+    rows: [],
+    total: 0,
+  },
+  staticRows: {
+    rows: [],
+    total: 0,
+    filtered: [],
+    filteredTotal: 0,
+  },
 });
 
 export default store;

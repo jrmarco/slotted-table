@@ -1,6 +1,6 @@
-import { Translations } from "../../types/main";
+import { TTranslations } from "../../types/main";
 
-const translations: Translations = {
+const translations: TTranslations = {
   pleaseWait: "Loading",
   noResults: "No results",
   rowsPerPage: "Rows per page:",

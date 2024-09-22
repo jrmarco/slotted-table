@@ -1,10 +1,12 @@
-export type StyleKeys = 'container' | 'header' | 'body' | 'footer' | 'row' | 'cell' | 'pageselector' | 'pagebtns' | 'filter' | 'filteractions' | 'activefilter' | 'searchbutton' | 'filterbutton';
-export type Styles = Record<StyleKeys, string | undefined>;
-export type Translations = {[key: string]: string };
+export type TStyleKeys = 'container' | 'header' | 'body' | 'footer' | 'row' | 'cell' | 'pageselector' | 'pagebtns' | 'filter' | 'filteractions' | 'activefilter' | 'searchbutton' | 'filterbutton';
+export type TStyles = Record<TStyleKeys, string | undefined>;
+export type TTranslations = {[key: string]: string };
+// eslint-disable-next-line
+export type TItem = Record<string, any>;
 
 export type Store = {
   language: string,
-  trs: Translations,
+  trs: TTranslations,
   loading: boolean,
   // eslint-disable-next-line
   columns: Array<any>,
@@ -16,18 +18,28 @@ export type Store = {
   endIndex: number,
   page: number,
   rowsPerPage: number,
-  totalItems: number,
-  styles: Styles,
+  styles: TStyles,
   filters: Array<string>,
   prevFilters: Array<string>,
-  selection: Array<string>,
-  selector: boolean,
+  hasCheckboxSelector: boolean,
   selectorColIdentifier: string,
   allSelected: boolean,
+  checkboxes: {[key: string]: boolean},
+  hasServerCallback: boolean,
+  dynamicRows: {
+    rows: TItem[],
+    total: number,
+  },
+  staticRows: {
+    rows: TItem[],
+    total: number,
+    filtered: TItem[],
+    filteredTotal: number,
+  }
 }
   
 
-export type Headers = {
+export type THeaders = {
   text: string,
   value : string,
   empty ?: string,
@@ -35,19 +47,22 @@ export type Headers = {
   width ?: number,
 }
 
-// eslint-disable-next-line
-export type Item = Record<string, any>;
-
-export type CallbackParameters = {
+export type TCallbackParameters = {
   page: number;
   rowsPerPage: number | string;
   sortBy: string;
   sortType: string;
   filters ?: Array<string>,
+  all ?: boolean,
 };
 
 // Define the type for the response object
-export type ResponseType = {
-  rows: Item[];
+export type TResponseType = {
+  rows: TItem[];
   totalRows: number;
+}
+
+export type TReloadParams = {
+  clearSelected ?: boolean,
+  resetPage ?: boolean,
 }

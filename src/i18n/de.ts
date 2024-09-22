@@ -1,6 +1,6 @@
-import { Translations } from "../../types/main";
+import { TTranslations } from "../../types/main";
 
-const translations: Translations = {
+const translations: TTranslations = {
   pleaseWait: "Laden",
   noResults: "Keine Ergebnisse",
   rowsPerPage: "Zeilen pro Seite:",
@@ -8,7 +8,7 @@ const translations: Translations = {
   filter: "Filter",
   search: "Suche",
   activefilters: "Aktive Suche",
-  bulkActions: "Massenaktionen",
+  bulkActions: "Ausgewählt",
   selectAll: "Alle auswählen",
   selectCurrentPageElement: "Alle Elemente auf dieser Seite auswählen",
 };

@@ -13,9 +13,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "format": "prettier --write src/",
-    "lint": "npx eslint --fix --ignore-pattern dist",
-    "forlint" : "npm run lint && npm run format"
+    "lint": "npx eslint --fix --ignore-pattern dist && prettier --write src/"
   },
   "keywords": [],
   "author": {

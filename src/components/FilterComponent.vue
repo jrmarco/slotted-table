@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue";
 import store from "../store/main";
-import sharedFunctions from "../store/functions";
+import sharedFunctions from "../store/sharedFunctions";
 import BulkActions from "./BulkSelection.vue";
 
 const trs = computed(() => store.value.trs);
@@ -44,6 +44,18 @@ const activeList = ref<string[]>([]);
 
 const emit = defineEmits(["update", "updateSelection"]);
 
+/**
+ * Computed properties for FilterComponent.vue
+ *
+ * - computedFilterContainerClass: Computes the CSS classes for the filter container.
+ * - computedFilterActionClass: Computes the CSS classes for the filter actions.
+ * - computedActiveFilters: Computes the CSS classes for the active filters.
+ * - computedFilterButtonSearch: Computes the CSS classes for the search button in the filter.
+ * - computedFilterButtonsActive: Computes the CSS classes for the active filter buttons.
+ *
+ * Each computed property returns an array containing a default class and a dynamically
+ * generated class from the sharedFunctions.getStyle method.
+ */
 const computedFilterContainerClass = computed(() => [
   "st-filtercontainer",
   sharedFunctions.getStyle("filter"),
@@ -65,10 +77,33 @@ const computedFilterButtonsActive = computed(() => [
   sharedFunctions.getStyle("filterbutton"),
 ]);
 
+/**
+ * Computed property that returns the active filters from the store.
+ * If no filters are present, it returns an empty array.
+ */
 const activefilters = computed(() => store.value.filters || []);
-const useCheckbox = computed(() => store.value.selector);
-const currentRows = computed(() => Number(store.value.totalItems));
 
+/**
+ * Computed property that checks if the checkbox selector is enabled in the store.
+ * Returns a boolean value.
+ */
+const useCheckbox = computed(() => store.value.hasCheckboxSelector);
+
+/**
+ * Computed property that returns the current number of rows.
+ */
+const currentRows = computed(() =>
+  store.value.hasServerCallback
+    ? store.value.dynamicRows.total
+    : store.value.staticRows.filteredTotal,
+);
+
+/**
+ * Normalizes a given string by performing the following operations:
+ *
+ * @param {string} rawString - The string to be normalized.
+ * @returns {string} - The normalized string.
+ */
 const normalizeString = (rawString: string) => {
   if (!rawString || rawString === "") {
     return "";
@@ -80,6 +115,11 @@ const normalizeString = (rawString: string) => {
   return curedString;
 };
 
+/**
+ * Updates the filter text based on the current search text and active rows.
+ *
+ * @function updateFilterText
+ */
 const updateFilterText = () => {
   const text = store.value.filters || [];
   if (searchText.value === "" || currentRows.value <= 0) {
@@ -91,9 +131,10 @@ const updateFilterText = () => {
     if (!text) {
       store.value.filters = [];
     }
+    sharedFunctions.resetCheckboxes();
     store.value.filters.push(searchText.value);
     activeList.value.push(curedString);
-    emit("update");
+    emit("update", { resetPage: true });
     searchText.value = "";
     return;
   }
@@ -102,12 +143,18 @@ const updateFilterText = () => {
     return;
   }
 
+  sharedFunctions.resetCheckboxes();
   store.value.filters.push(searchText.value);
   activeList.value.push(curedString);
-  emit("update");
+  emit("update", { resetPage: true });
   searchText.value = "";
 };
 
+/**
+ * Removes a text filter from the active list and store filters.
+ *
+ * @param {MouseEvent} event - The mouse event triggered by the user action.
+ */
 const removeTextFilter = (event: MouseEvent) => {
   const target = event.target as Element;
   const searchText = target.getAttribute("data-key") || "";
@@ -118,7 +165,7 @@ const removeTextFilter = (event: MouseEvent) => {
     (val: string) => val !== target.innerHTML,
   );
   target.remove();
-  emit("update");
+  emit("update", { resetPage: true });
 };
 
 const emitUpdateSelection = () => emit("updateSelection");

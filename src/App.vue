@@ -1,7 +1,8 @@
-<script setup>
+<script lang="ts" setup>
 import SlottedTable from "./SlottedTable.vue";
+import { THeaders, TItem } from "../types/main";
 
-const headers = [
+const headers: THeaders[] = [
   { text: "SKU", value: "sku", sortable: true },
   { text: "Name", value: "name", sortable: true },
   { text: "Link", value: "link", sortable: false, empty: "No link" },
@@ -11,7 +12,8 @@ const headers = [
   { text: "Updated", value: "updated_at", sortable: true },
   { text: "Action", value: "action", sortable: false },
 ];
-const items = [
+
+const items: TItem[] = [
   {
     id: "30",
     sku: "SKU-14",
@@ -37,6 +39,18 @@ const items = [
     description_full: "Dark night black coffee",
   },
   {
+    id: "29",
+    sku: "SKU-13",
+    name: "Coffee",
+    description: "Dark night black cof...",
+    link: null,
+    quantity: "2",
+    weight: "5",
+    created_at: "2024-07-16 16:32:35",
+    updated_at: "2024-07-16 16:32:35",
+    description_full: "Dark night black coffee",
+  },
+  {
     id: "28",
     sku: "SKU-12",
     name: "Sugar",
@@ -44,8 +58,8 @@ const items = [
     link: null,
     quantity: "0",
     weight: "5",
-    created_at: "2024-07-01 15:12:35",
-    updated_at: "2024-07-01 15:12:35",
+    created_at: "2024-07-16 16:32:35",
+    updated_at: "2024-07-16 16:32:35",
     description_full: "Brown sugar",
   },
   {
@@ -135,7 +149,7 @@ const items = [
   },
 ];
 
-const rowDetails = (data) => {
+const rowDetails = (data: TItem) => {
   const string = JSON.stringify(data)
     .replace(/\{/, "\n{\n")
     .replace(/,/g, ",\n")
@@ -146,14 +160,20 @@ const rowDetails = (data) => {
 const serverMimic = () => {
   return {
     rows: [],
-    totalItems: 0,
+    totalRows: 0,
   };
 };
 </script>
 
 <template>
   <h1>Slotted table sample</h1>
-  <SlottedTable :headers="headers" :items="items" :callback="serverMimic">
+  <SlottedTable
+    :headers="headers"
+    :items="items"
+    :callback="serverMimic"
+    :selector="true"
+    @update-selection="(e) => console.log(e)"
+  >
     <template v-slot:selector="{ data }">
       <input type="checkbox" :id="data.id" />
     </template>

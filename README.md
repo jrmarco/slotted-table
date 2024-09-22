@@ -1,4 +1,4 @@
-# SlottedTable
+# SlottedTable v1.0
 
 ## Introduction
 
@@ -69,13 +69,13 @@ Use `SlottedTable` in your Vue components as follows:
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { Header, Item } from 'slotted-table';
+import type { THeader, TItem } from 'slotted-table';
 // import "slotted-table/dist/index.css"; # optional
 
 export default defineComponent({
   setup() {
-    const headers: Header[] = [...];
-    const items: Item[] = [...];
+    const headers: THeader[] = [...];
+    const items: TItem[] = [...];
 
     return { headers, items };
   },
@@ -97,13 +97,13 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { defineComponent, onMounted } from 'vue';
-import type { Header, Item } from 'slotted-table';
+import type { THeader, TItem } from 'slotted-table';
 
 export default defineComponent({
-  const headers: Header[] = ref([...]);
+  const headers: THeader[] = ref([...]);
 
   const serverRequest = async => (tableProps) {
-    const { page, rowsPerPage, sortBy, sortType } = tableProps;
+    const { sortBy, sortType, page, rowsPerPage, all } = tableProps;
     try {
       const response = axios.post(ENDPOINT_URL, { ...YOUR_DATA, ...tableProps })
       // Handle response
@@ -141,11 +141,13 @@ Sample:
   
 
 - **Styles**: 
-custom CSS classes for various table elements. Provide classes for <code>container, header, body, footer, row, cell, pageselector, and pagebtn</code>. Example:  
+custom CSS classes for various table elements. Provide classes for <code>container, header, body, footer, row, cell, pageselector, pagebtn filter, filteractions, activefilter, searchbutton, filterbutton</code>. Example:  
 ```js
 styles = { 
   header: "myCustomClass", 
-  cell: "myCellclass myCellsubclass" 
+  cell: "myCellclass myCellsubclass",
+  CLASS_NAME: "CUSTOM_CLASS_1 CUSTOM_CLASS_2",
+  ...
 }
 ```
 
@@ -160,11 +162,12 @@ Sample:
 // Headers sample, using three columns
 const headers = [
   { text: 'Column 1', value: 'col1' },
-  { text: 'Column 2', value: 'col2' }
+  { text: 'Column 2', value: 'col2', width: 25 }
+  { text: 'Column 3', value: 'col3', empty: "No value" },
 ];
+
 // Items sample: we map the three columns 
 // and some unmapped column data
-
 const items = [
   {
     col1: 'Data 1',
@@ -176,7 +179,7 @@ const items = [
 ``` 
 
 - **Callback** ( Server-Side ):  
-a function for fetching data dynamically. This function receives an object with properties page, rowsPerPage, sortBy, and sortType. The function should return an object with rows (array of data) and totalRows (total number of items).
+a function for fetching data dynamically. This function receives an object with properties page, rowsPerPage, sortBy, sortType and all. The function should return an object with rows (array of data) and totalRows (total number of items).
 
 ```js
 // Callback object parameters
@@ -184,7 +187,8 @@ parameters = {
   page, // current page - starts at 1
   rowsPerPage, // maximum number of element per page
   sortBy, // field to sorty by - default "id"
-  sortType, // ordering type ( asc / desc ) - default "desc"
+  sortType, // ordering type ( asc / desc ) - default "desc",
+  all, // flag ( bool ) - request all entries when in server mode
 }
 
 // Callback function sample
@@ -200,13 +204,13 @@ async function serverRequest(params) {
 ### <i>Important Notes:</i>  
 
 The callback function must return an object with rows and totalRows properties.  
-Assuming the callback function returns a promise that resolves to ResponseType
+Assuming the callback function returns a promise that resolves to TResponseType
 
 
 ```js
 // ResponseType
-export type ResponseType = {
-  rows: Item[];
+export type TResponseType = {
+  rows: TItem[];
   totalRows: number;
 }
 
@@ -217,13 +221,30 @@ export type ResponseType = {
 }
 ```
 
+## Exposed methods
+
+### reloadTable:
+asynchronous function responsible for reloading table data based on the provided parameters. It handles both server-side and static data reloading, while also performing additional actions such as resetting the table page, recalculating indices, and clearing selected checkboxes when required.
+#### Parameters:
+- params (TReloadParams - optional): An object containing optional parameters that control the behavior of the table reloading. Default is an empty object ({}).
+  - resetPage (boolean - optional): If true, the table's page will be reset to the first page (page = 1).
+  - clearSelected (boolean - optional): If true, the selected checkboxes in the table will be cleared.
+
+### getSelection:
+asynchronous function that returns the currently selected rows in a table. It handles both server-side and static data, depending on whether the table is configured to fetch data from the server. When all rows are selected, and the table supports server-side operations, it requests all rows from the server.
+
+### resetSelection:
+function clear the selected rows list
+
 ## Todo
+- **Custom table components slot**: Detect if user configuration provides custom slots ( filters, search, etc. ) and use them as replacement
 
-- **Filtering**: Add functionality for filtering table rows based on criteria.
+---
 
-- **Searching**: Implement search capabilities to find specific items.
+- ~~**Filtering**: Add functionality for filtering table rows based on criteria.~~ ✅
+- ~~**Searching**: Implement search capabilities to find specific items.~~ ✅
 
-- **Row Selection**: Enable selection of individual rows for actions or details.
+- ~~**Row Selection**: Enable selection of individual rows for actions or details.~~ ✅
 
 ## Contribution
 

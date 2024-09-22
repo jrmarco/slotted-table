@@ -1,5 +1,5 @@
-import { ref as N, defineComponent as O, computed as l, openBlock as n, createElementBlock as c, normalizeClass as S, Fragment as F, renderList as L, normalizeStyle as ae, createTextVNode as q, toDisplayString as C, createElementVNode as m, withDirectives as ne, vModelSelect as ge, createCommentVNode as W, withKeys as he, vModelText as ye, createBlock as oe, toRefs as Se, onMounted as me, createVNode as H, renderSlot as te } from "vue";
-const _e = {
+import { ref as j, defineComponent as O, computed as r, openBlock as i, createElementBlock as d, normalizeClass as S, Fragment as A, renderList as L, normalizeStyle as X, createTextVNode as V, toDisplayString as C, createElementVNode as k, withDirectives as q, vModelSelect as oe, unref as E, createCommentVNode as W, withKeys as re, vModelText as ne, createBlock as Y, toRefs as ce, onMounted as ie, createVNode as H, vModelCheckbox as ue, renderSlot as Z } from "vue";
+const de = {
   pleaseWait: "Caricamento",
   noResults: "Nessun risultato",
   rowsPerPage: "Righe per pagina:",
@@ -7,10 +7,10 @@ const _e = {
   filter: "Filtro",
   search: "Cerca",
   activefilters: "Ricerca attiva",
-  bulkActions: "Azioni in blocco",
+  bulkActions: "Selezionati",
   selectAll: "Seleziona tutto",
   selectCurrentPageElement: "Seleziona tutti gli elementi in questa pagina"
-}, le = {
+}, G = {
   pleaseWait: "Loading",
   noResults: "No results",
   rowsPerPage: "Rows per page:",
@@ -22,7 +22,7 @@ const _e = {
   selectAll: "Select all",
   selectCurrentPageElement: "Select all elements in this page",
   unselectAll: "Unselect all"
-}, ke = {
+}, ve = {
   pleaseWait: "Chargement",
   noResults: "Aucun résultat",
   rowsPerPage: "Lignes par page:",
@@ -30,11 +30,10 @@ const _e = {
   filter: "Filtrer",
   search: "Rechercher",
   activefilters: "Recherche active",
-  bulkActions: "Actions en masse",
+  bulkActions: "Sélectionnés",
   selectAll: "Tout sélectionner",
-  selectCurrentPageElement: "",
-  allSelected: "Sélectionner tous les éléments sur cette page"
-}, we = {
+  selectCurrentPageElement: ""
+}, fe = {
   pleaseWait: "Laden",
   noResults: "Keine Ergebnisse",
   rowsPerPage: "Zeilen pro Seite:",
@@ -42,23 +41,23 @@ const _e = {
   filter: "Filter",
   search: "Suche",
   activefilters: "Aktive Suche",
-  bulkActions: "Massenaktionen",
+  bulkActions: "Ausgewählt",
   selectAll: "Alle auswählen",
   selectCurrentPageElement: "Alle Elemente auf dieser Seite auswählen"
-}, be = (v) => {
-  switch (v) {
+}, pe = (t) => {
+  switch (t) {
     case "it":
-      return _e;
+      return de;
     case "en":
-      return le;
+      return G;
     case "fr":
-      return ke;
+      return ve;
     case "de":
-      return we;
+      return fe;
     default:
-      return le;
+      return G;
   }
-}, e = N({
+}, e = j({
   language: "en",
   trs: {},
   loading: !0,
@@ -71,19 +70,29 @@ const _e = {
   endIndex: 1,
   page: 1,
   rowsPerPage: 10,
-  totalItems: 0,
   styles: {},
   filters: [],
   prevFilters: [],
-  selection: [],
-  selector: !1,
+  hasCheckboxSelector: !1,
   selectorColIdentifier: "",
-  allSelected: !1
-}), Ce = (v) => {
-  const { styles: y } = e.value;
-  if (!Object.keys(y).length)
+  allSelected: !1,
+  checkboxes: {},
+  hasServerCallback: !1,
+  dynamicRows: {
+    rows: [],
+    total: 0
+  },
+  staticRows: {
+    rows: [],
+    total: 0,
+    filtered: [],
+    filteredTotal: 0
+  }
+}), he = (t) => {
+  const { styles: s } = e.value;
+  if (!Object.keys(s).length)
     return "";
-  function g(h) {
+  function l(a) {
     return [
       "container",
       "header",
@@ -98,141 +107,161 @@ const _e = {
       "activefilter",
       "searchbutton",
       "filterbutton"
-    ].includes(h);
+    ].includes(a);
   }
-  return g(v) && y[v] || "";
-}, se = (v) => {
-  const y = new Date(v);
-  return !isNaN(y.getTime()) && v === y.toISOString().split("T")[0] ? y.getTime() : !1;
-}, xe = (v) => isNaN(Number(v)) ? se(v) ? se(v) : v : Number(v), b = {
-  getStyle: Ce,
-  castToType: xe
-}, Ie = ["onClick", "title"], Te = { key: 0 }, Pe = ["innerHTML"], Ae = ["title", "checked", "disabled"], $e = /* @__PURE__ */ O({
+  return l(t) && s[t] || "";
+}, Q = (t) => {
+  const s = new Date(t);
+  return !isNaN(s.getTime()) && t === s.toISOString().split("T")[0] ? s.getTime() : !1;
+}, ge = (t) => isNaN(Number(t)) ? Q(t) ? Q(t) : t : Number(t), ee = () => {
+  const { hasServerCallback: t, dynamicRows: s, staticRows: l } = e.value;
+  return t ? s.rows : l.filtered;
+}, ye = () => {
+  const { hasServerCallback: t, dynamicRows: s, staticRows: l } = e.value;
+  return t ? s.total : l.filteredTotal;
+}, te = () => {
+  Object.keys(e.value.checkboxes).forEach((s) => {
+    e.value.checkboxes[s] = !1;
+  }), e.value.allSelected = !1;
+}, we = () => {
+  const t = [];
+  e.value.allSelected = !1;
+  const s = Object.keys(e.value.checkboxes);
+  for (let a = 0; a < s.length; a += 1)
+    e.value.checkboxes[s[a]] && t.push(s[a]);
+  te();
+  const l = ee().map((a) => a.ST_UID);
+  t.forEach((a) => {
+    l.indexOf(a) !== -1 && (e.value.checkboxes[a] = !0);
+  });
+}, c = {
+  getStyle: he,
+  castToType: ge,
+  getRows: ee,
+  getTotalRows: ye,
+  resetCheckboxes: te,
+  setDisplayRowSelected: we
+}, Se = ["onClick", "title"], ke = { key: 0 }, be = ["innerHTML"], _e = ["title"], me = /* @__PURE__ */ O({
   __name: "TableHeader",
   emits: ["update", "updateSelection"],
-  setup(v, { emit: y }) {
-    const g = y, h = l(() => e.value.columns), x = l(() => e.value.selectorColIdentifier), I = l(() => e.value.trs), D = l(() => e.value.allSelected), B = l(() => [
+  setup(t, { emit: s }) {
+    const l = s, a = r(() => e.value.columns), n = r(() => e.value.selectorColIdentifier), v = r(() => e.value.trs), x = r(() => [
       "st-row",
       "st-header",
-      b.getStyle("row"),
-      b.getStyle("header")
-    ]), T = (p) => [
-      "st-cell",
-      p.sortable ? "st-pointer" : "",
-      b.getStyle("cell")
-    ], U = (p) => {
-      if (!p || !p.value || !p.sortable) return;
-      const { sortBy: d, sortType: o } = e.value.ordering;
-      e.value.ordering.sortType = d === p.value && o === "asc" ? "desc" : "asc", e.value.ordering.sortBy = p.value, g("update");
-    }, $ = (p) => ({
-      width: p.width ? `${p.width}px` : "auto"
-    }), _ = (p) => {
-      const { sortBy: d, sortType: o } = e.value.ordering;
-      return d !== p ? "" : !o || o === "asc" ? "&uarr;" : "&darr;";
-    }, P = (p) => {
-      const d = p.target;
-      if (!d)
+      c.getStyle("row"),
+      c.getStyle("header")
+    ]), _ = (f) => {
+      const h = [
+        "st-cell",
+        f.sortable ? "st-pointer" : "",
+        c.getStyle("cell")
+      ];
+      return f.value === n.value && h.push("w30"), h;
+    }, b = (f) => {
+      if (!f || !f.value || !f.sortable) return;
+      const { sortBy: h, sortType: g } = e.value.ordering;
+      e.value.ordering.sortType = h === f.value && g === "asc" ? "desc" : "asc", e.value.ordering.sortBy = f.value, l("update");
+    }, m = (f) => ({
+      width: f.width ? `${f.width}px` : "auto"
+    }), R = (f) => {
+      const { sortBy: h, sortType: g } = e.value.ordering;
+      return h !== f ? "" : !g || g === "asc" ? "&uarr;" : "&darr;";
+    }, I = () => {
+      const f = c.getRows();
+      if (e.value.allSelected) {
+        e.value.allSelected = !1, c.resetCheckboxes();
         return;
-      let o = document.querySelectorAll(".st-row-selector");
-      const f = [];
-      o.forEach((k) => {
-        const u = k;
-        u.checked = d.checked, f.push(u.id);
-      }), f.forEach((k) => {
-        d.checked ? e.value.selection.indexOf(k) === -1 && e.value.selection.push(k) : e.value.selection = e.value.selection.filter(
-          (u) => u !== k
-        );
-      }), g("updateSelection");
+      }
+      f.forEach((h) => {
+        e.value.checkboxes[h.ST_UID] = !e.value.checkboxes[h.ST_UID];
+      }), l("updateSelection");
     };
-    return (p, d) => (n(), c("div", {
-      class: S(B.value)
+    return (f, h) => (i(), d("div", {
+      class: S(x.value)
     }, [
-      (n(!0), c(F, null, L(h.value, (o, f) => (n(), c("div", {
-        key: o.value || f,
-        onClick: (k) => U(o),
-        class: S(T(o)),
-        style: ae($(o)),
-        title: o.text
+      (i(!0), d(A, null, L(a.value, (g, p) => (i(), d("div", {
+        key: g.value || p,
+        onClick: (T) => b(g),
+        class: S(_(g)),
+        style: X(m(g)),
+        title: g.text
       }, [
-        o.value !== x.value ? (n(), c("b", Te, [
-          q(C(o.text) + " ", 1),
-          m("span", {
-            innerHTML: _(o.value)
-          }, null, 8, Pe)
-        ])) : (n(), c("input", {
+        g.value !== n.value ? (i(), d("b", ke, [
+          V(C(g.text) + " ", 1),
+          k("span", {
+            innerHTML: R(g.value)
+          }, null, 8, be)
+        ])) : (i(), d("button", {
           key: 1,
-          id: "st-select-all",
-          type: "checkbox",
-          title: I.value.selectCurrentPageElement,
-          checked: D.value,
-          onChange: P,
-          disabled: D.value
-        }, null, 40, Ae))
-      ], 14, Ie))), 128))
+          class: "st-select-all",
+          onClick: I,
+          title: v.value.selectCurrentPageElement
+        }, " ☑️ ", 8, _e))
+      ], 14, Se))), 128))
     ], 2));
   }
-}), De = ["value"], Be = ["onClick"], Re = { key: 1 }, Ue = /* @__PURE__ */ O({
+}), Ce = ["value"], xe = ["onClick"], Te = { key: 1 }, Re = /* @__PURE__ */ O({
   __name: "TableFooter",
   emits: ["update"],
-  setup(v, { emit: y }) {
-    const g = y, h = l(() => [5, 10, 25, 50]), x = l(() => {
-      const { totalItems: d, rowsPerPage: o, page: f } = e.value;
-      if (!d) return [];
-      const k = Math.ceil(d / o), u = f;
-      if (k <= 4)
-        return Array.from({ length: k }, (R, E) => E + 1);
-      const i = [1];
-      return u > 3 && i.push("..."), u > 2 && i.push(u - 1), u !== 1 && u !== k && i.push(u), u < k - 1 && i.push(u + 1), u < k - 2 && i.push("..."), i.push(k), i;
-    }), I = l({
+  setup(t, { emit: s }) {
+    const l = s, a = r(() => [5, 10, 25, 50]), n = r(() => {
+      const { rowsPerPage: h, page: g } = e.value;
+      if (!c.getTotalRows()) return [];
+      const p = Math.ceil(c.getTotalRows() / h), T = g;
+      if (p <= 4)
+        return Array.from({ length: p }, (D, w) => w + 1);
+      const U = [1];
+      return T > 3 && U.push("..."), T > 2 && U.push(T - 1), T !== 1 && T !== p && U.push(T), T < p - 1 && U.push(T + 1), T < p - 2 && U.push("..."), U.push(p), U;
+    }), v = r({
       get() {
         return e.value.rowsPerPage;
       },
-      set(d) {
-        e.value.rowsPerPage = d;
+      set(h) {
+        e.value.rowsPerPage = h;
       }
-    }), D = l(() => e.value.startIndex), B = l(() => e.value.endIndex), T = l(() => e.value.totalItems), U = l(() => e.value.page), $ = async (d) => {
-      !Number.isInteger(d) || d < 1 || (e.value.page = d, g("update", { clearSelected: !0 }));
-    }, _ = l(() => e.value.trs), P = l(() => ["st-pageselector", b.getStyle("pageselector")]), p = l(() => ["st-pagebtns", b.getStyle("pagebtns")]);
-    return (d, o) => (n(), c(F, null, [
-      m("div", {
-        class: S(P.value)
+    }), x = r(() => e.value.startIndex), _ = r(() => e.value.endIndex), b = r(() => e.value.page), m = async (h) => {
+      !Number.isInteger(h) || h < 1 || (e.value.page = h, l("update", { clearSelected: !0 }));
+    }, R = r(() => e.value.trs), I = r(() => ["st-pageselector", c.getStyle("pageselector")]), f = r(() => ["st-pagebtns", c.getStyle("pagebtns")]);
+    return (h, g) => (i(), d(A, null, [
+      k("div", {
+        class: S(I.value)
       }, [
-        q(C(_.value.rowsPerPage) + " ", 1),
-        ne(m("select", {
+        V(C(R.value.rowsPerPage) + " ", 1),
+        q(k("select", {
           name: "st-rows-per-page-selector",
           class: "st-select",
-          "onUpdate:modelValue": o[0] || (o[0] = (f) => I.value = f),
-          onChange: o[1] || (o[1] = (f) => $(1))
+          "onUpdate:modelValue": g[0] || (g[0] = (p) => v.value = p),
+          onChange: g[1] || (g[1] = (p) => m(1))
         }, [
-          (n(!0), c(F, null, L(h.value, (f) => (n(), c("option", {
-            key: f,
-            value: f
-          }, C(f), 9, De))), 128))
+          (i(!0), d(A, null, L(a.value, (p) => (i(), d("option", {
+            key: p,
+            value: p
+          }, C(p), 9, Ce))), 128))
         ], 544), [
-          [ge, I.value]
+          [oe, v.value]
         ])
       ], 2),
-      m("div", null, C(D.value) + "-" + C(B.value) + " " + C(_.value.of) + " " + C(T.value || 0), 1),
-      T.value > I.value ? (n(), c("div", {
+      k("div", null, C(x.value) + "-" + C(_.value) + " " + C(R.value.of) + " " + C(E(c).getTotalRows() || 0), 1),
+      E(c).getTotalRows() > v.value ? (i(), d("div", {
         key: 0,
-        class: S(p.value)
+        class: S(f.value)
       }, [
-        (n(!0), c(F, null, L(x.value, (f) => (n(), c(F, { key: f }, [
-          typeof f == "number" ? (n(), c("button", {
+        (i(!0), d(A, null, L(n.value, (p) => (i(), d(A, { key: p }, [
+          typeof p == "number" ? (i(), d("button", {
             key: 0,
-            class: S({ "st-active": Number(f) === Number(U.value) }),
-            onClick: (k) => $(f)
-          }, C(f), 11, Be)) : (n(), c("span", Re, "  "))
+            class: S({ "st-active": Number(p) === Number(b.value) }),
+            onClick: (T) => m(p)
+          }, C(p), 11, xe)) : (i(), d("span", Te, "  "))
         ], 64))), 128))
       ], 2)) : W("", !0)
     ], 64));
   }
-}), Fe = {
+}), Pe = {
   width: "100",
   height: "100",
   viewBox: "0 0 100 100",
   xmlns: "http://www.w3.org/2000/svg"
-}, Ee = /* @__PURE__ */ m("circle", {
+}, De = /* @__PURE__ */ k("circle", {
   cx: "50",
   cy: "50",
   r: "40",
@@ -242,27 +271,27 @@ const _e = {
   "stroke-dasharray": "251.2",
   "stroke-dashoffset": "251.2"
 }, [
-  /* @__PURE__ */ m("animate", {
+  /* @__PURE__ */ k("animate", {
     attributeName: "stroke-dashoffset",
     from: "251.2",
     to: "0",
     dur: "2s",
     repeatCount: "indefinite"
   }),
-  /* @__PURE__ */ m("animate", {
+  /* @__PURE__ */ k("animate", {
     attributeName: "opacity",
     from: "1",
     to: "0",
     dur: "2s",
     repeatCount: "indefinite"
   })
-], -1), Me = {
+], -1), Ie = {
   x: "50%",
   y: "60%",
   "text-anchor": "middle",
   "font-size": "10px",
   fill: "#007bff"
-}, Ne = /* @__PURE__ */ O({
+}, Ue = /* @__PURE__ */ O({
   __name: "SpinnerItem",
   props: {
     text: {
@@ -270,118 +299,181 @@ const _e = {
       default: ""
     }
   },
-  setup(v) {
-    return (y, g) => (n(), c("svg", Fe, [
-      Ee,
-      m("text", Me, C(v.text), 1)
+  setup(t) {
+    return (s, l) => (i(), d("svg", Pe, [
+      De,
+      k("text", Ie, C(t.text), 1)
     ]));
   }
-}), Le = /* @__PURE__ */ O({
+}), $e = /* @__PURE__ */ O({
   __name: "BulkSelection",
   emits: ["updateSelection"],
-  setup(v, { emit: y }) {
-    const g = l(() => e.value.trs), h = l(() => [
+  setup(t, { emit: s }) {
+    const l = r(() => e.value.trs), a = r(() => [
       "st-bulkactions",
-      b.getStyle("bulkactions")
-    ]), x = l(() => e.value.allSelected ? g.value.unselectAll : g.value.selectAll), I = l(() => {
-      const T = e.value.selection.length;
-      return e.value.allSelected ? e.value.totalItems : T;
-    }), D = y, B = () => {
-      e.value.allSelected = !e.value.allSelected, e.value.allSelected === !1 && (e.value.selection = []), D("updateSelection");
+      c.getStyle("bulkactions")
+    ]), n = r(() => l.value.selectAll), v = r(() => {
+      const { hasServerCallback: b, checkboxes: m, dynamicRows: R, staticRows: I } = e.value, f = Object.values(m).filter((h) => h);
+      return e.value.allSelected ? b ? R.total : I.total : f.length;
+    }), x = s, _ = () => {
+      e.value.allSelected = !0;
+      const { hasServerCallback: b, dynamicRows: m, staticRows: R } = e.value;
+      (b ? m.rows : R.rows).forEach((f) => {
+        e.value.checkboxes[f.ST_UID] = !0;
+      }), x("updateSelection");
     };
-    return (T, U) => (n(), c("div", {
-      class: S(h.value)
+    return (b, m) => (i(), d("div", {
+      class: S(a.value)
     }, [
-      m("p", null, C(g.value.bulkActions) + ":", 1),
-      m("p", null, C(I.value), 1),
-      m("button", { onClick: B }, C(x.value), 1)
+      k("p", null, C(l.value.bulkActions) + ":", 1),
+      k("p", null, C(v.value), 1),
+      k("button", { onClick: _ }, C(n.value), 1)
     ], 2));
   }
-}), Oe = ["disabled"], ze = ["data-key"], qe = /* @__PURE__ */ O({
+}), Ae = ["disabled"], Be = ["data-key"], Fe = /* @__PURE__ */ O({
   __name: "FilterComponent",
   emits: ["update", "updateSelection"],
-  setup(v, { emit: y }) {
-    const g = l(() => e.value.trs), h = N(""), x = N([]), I = y, D = l(() => [
+  setup(t, { emit: s }) {
+    const l = r(() => e.value.trs), a = j(""), n = j([]), v = s, x = r(() => [
       "st-filtercontainer",
-      b.getStyle("filter")
-    ]), B = l(() => [
+      c.getStyle("filter")
+    ]), _ = r(() => [
       "st-filteractions",
-      b.getStyle("filteractions")
-    ]), T = l(() => [
+      c.getStyle("filteractions")
+    ]), b = r(() => [
       "st-activefilter",
-      b.getStyle("activefilter")
-    ]), U = l(() => [
+      c.getStyle("activefilter")
+    ]), m = r(() => [
       "st-searchbutton",
-      b.getStyle("searchbutton")
-    ]), $ = l(() => [
+      c.getStyle("searchbutton")
+    ]), R = r(() => [
       "st-filterbutton",
-      b.getStyle("filterbutton")
-    ]), _ = l(() => e.value.filters || []), P = l(() => e.value.selector), p = l(() => Number(e.value.totalItems)), d = (u) => {
-      if (!u || u === "")
+      c.getStyle("filterbutton")
+    ]), I = r(() => e.value.filters || []), f = r(() => e.value.hasCheckboxSelector), h = r(
+      () => e.value.hasServerCallback ? e.value.dynamicRows.total : e.value.staticRows.filteredTotal
+    ), g = (D) => {
+      if (!D || D === "")
         return "";
-      let i = u.trim().toLowerCase();
-      return i = i.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), i = i.replace(/[^a-z0-9]/g, "-").trim(), i;
-    }, o = () => {
-      const u = e.value.filters || [];
-      if (h.value === "" || p.value <= 0)
+      let w = D.trim().toLowerCase();
+      return w = w.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), w = w.replace(/[^a-z0-9]/g, "-").trim(), w;
+    }, p = () => {
+      const D = e.value.filters || [];
+      if (a.value === "" || h.value <= 0)
         return;
-      const i = d(h.value);
-      if (!u || u.length === 0) {
-        u || (e.value.filters = []), e.value.filters.push(h.value), x.value.push(i), I("update"), h.value = "";
+      const w = g(a.value);
+      if (!D || D.length === 0) {
+        D || (e.value.filters = []), c.resetCheckboxes(), e.value.filters.push(a.value), n.value.push(w), v("update", { resetPage: !0 }), a.value = "";
         return;
       }
-      x.value.indexOf(i) === -1 && (e.value.filters.push(h.value), x.value.push(i), I("update"), h.value = "");
-    }, f = (u) => {
-      const i = u.target, R = i.getAttribute("data-key") || "";
-      x.value = x.value.filter(
-        (E) => E !== R
+      n.value.indexOf(w) === -1 && (c.resetCheckboxes(), e.value.filters.push(a.value), n.value.push(w), v("update", { resetPage: !0 }), a.value = "");
+    }, T = (D) => {
+      const w = D.target, $ = w.getAttribute("data-key") || "";
+      n.value = n.value.filter(
+        (F) => F !== $
       ), e.value.filters = e.value.filters.filter(
-        (E) => E !== i.innerHTML
-      ), i.remove(), I("update");
-    }, k = () => I("updateSelection");
-    return (u, i) => (n(), c(F, null, [
-      m("div", {
-        class: S(D.value)
+        (F) => F !== w.innerHTML
+      ), w.remove(), v("update", { resetPage: !0 });
+    }, U = () => v("updateSelection");
+    return (D, w) => (i(), d(A, null, [
+      k("div", {
+        class: S(x.value)
       }, [
-        m("div", {
-          class: S(B.value)
+        k("div", {
+          class: S(_.value)
         }, [
-          q(C(g.value.filter) + " ", 1),
-          ne(m("input", {
+          V(C(l.value.filter) + " ", 1),
+          q(k("input", {
             id: "st-text-search",
             type: "text",
-            onKeyup: he(o, ["enter"]),
-            "onUpdate:modelValue": i[0] || (i[0] = (R) => h.value = R),
+            onKeyup: re(p, ["enter"]),
+            "onUpdate:modelValue": w[0] || (w[0] = ($) => a.value = $),
             autocomplete: "on"
           }, null, 544), [
-            [ye, h.value]
+            [ne, a.value]
           ]),
-          m("button", {
-            class: S(U.value),
-            onClick: o,
-            disabled: p.value <= 0
-          }, C(g.value.search), 11, Oe)
+          k("button", {
+            class: S(m.value),
+            onClick: p,
+            disabled: h.value <= 0
+          }, C(l.value.search), 11, Ae)
         ], 2),
-        P.value ? (n(), oe(Le, {
+        f.value ? (i(), Y($e, {
           key: 0,
-          onUpdateSelection: k
+          onUpdateSelection: U
         })) : W("", !0)
       ], 2),
-      _.value.length > 0 ? (n(), c("div", {
+      I.value.length > 0 ? (i(), d("div", {
         key: 0,
-        class: S(T.value)
+        class: S(b.value)
       }, [
-        q(C(g.value.activefilters) + " ", 1),
-        (n(!0), c(F, null, L(_.value, (R) => (n(), c("button", {
-          class: S($.value),
-          key: d(R),
-          "data-key": d(R),
-          onClick: f
-        }, C(R), 11, ze))), 128))
+        V(C(l.value.activefilters) + " ", 1),
+        (i(!0), d(A, null, L(I.value, ($) => (i(), d("button", {
+          class: S(R.value),
+          key: g($),
+          "data-key": g($),
+          onClick: T
+        }, C($), 11, Be))), 128))
       ], 2)) : W("", !0)
     ], 64));
   }
-}), Ve = { key: 1 }, je = ["onClick"], He = { key: 0 }, We = ["id", "checked", "disabled"], Ke = /* @__PURE__ */ O({
+}), Ee = () => {
+  const { staticRows: t, ordering: s } = e.value, { sortBy: l, sortType: a } = s;
+  t.rows.sort((n, v) => {
+    const x = c.castToType(n[l]), _ = c.castToType(v[l]);
+    return x < _ ? a === "asc" ? -1 : 1 : x > _ ? a === "asc" ? 1 : -1 : 0;
+  });
+}, Le = () => {
+  const { filters: t, staticRows: s } = e.value;
+  if (t.length === 0) {
+    e.value.staticRows.filtered = s.rows, e.value.staticRows.filteredTotal = s.rows.length;
+    return;
+  }
+  const l = s.rows.filter((a) => {
+    const n = Object.values(a).join("|").toLowerCase();
+    let v = 0;
+    for (const x of t) {
+      const _ = n.includes(x.toLowerCase());
+      v += _ ? 1 : 0;
+    }
+    return v === t.length;
+  });
+  e.value.staticRows.filtered = l, e.value.staticRows.filteredTotal = l.length;
+}, Oe = () => {
+  const { page: t, rowsPerPage: s, staticRows: l } = e.value;
+  e.value.staticRows.filtered = l.filtered.slice(
+    (t - 1) * s,
+    t * s
+  );
+}, Me = () => {
+  Ee(), Le(), Oe();
+}, Ne = async (t) => {
+  const { page: s, rowsPerPage: l, ordering: a, filters: n, prevFilters: v } = e.value, { sortBy: x, sortType: _ } = a, b = {
+    page: s,
+    rowsPerPage: l,
+    sortBy: x,
+    sortType: _
+  };
+  n.length > 0 ? (b.filters = n, (n.length !== v.length || n.join("|") !== v.join("|")) && (e.value.page = 1, b.page = 1), e.value.prevFilters = [...n]) : e.value.prevFilters = [];
+  const m = await t(b);
+  e.value.dynamicRows.rows = m.rows, e.value.dynamicRows.total = m.totalRows;
+}, je = () => {
+  const { dynamicRows: t } = e.value;
+  return t.rows.filter((s) => e.value.checkboxes[s.ST_UID]).map((s) => {
+    const l = { ...s };
+    return delete l.ST_UID, l;
+  });
+}, Ve = () => {
+  const { checkboxes: t, allSelected: s, staticRows: l } = e.value;
+  return (s ? l.rows : l.filtered).filter((n) => t[n.ST_UID]).map((n) => {
+    const v = { ...n };
+    return delete v.ST_UID, v;
+  });
+}, N = {
+  loadStaticData: Me,
+  loadServerData: Ne,
+  returnSelectedDynamic: je,
+  returnSelectedStatic: Ve
+}, ze = { key: 1 }, He = ["onClick"], We = { key: 0 }, qe = ["id", "onUpdate:modelValue"], Ke = /* @__PURE__ */ O({
   __name: "SlottedTable",
   props: {
     headers: {
@@ -397,217 +489,170 @@ const _e = {
     callBack: { type: Function, default: null }
   },
   emits: ["updateSelection", "rowClick"],
-  setup(v, { expose: y, emit: g }) {
-    const h = v, { headers: x, items: I, styles: D, language: B, callBack: T, selector: U } = Se(h), $ = N(!1), _ = N([]), P = N([]), p = N(be(B.value)), d = g, o = async (t) => {
-      if (!T.value)
+  setup(t, { expose: s, emit: l }) {
+    const a = t, { headers: n, items: v, styles: x, language: _, callBack: b, selector: m } = ce(a), R = j(pe(_.value)), I = l, f = async (o) => {
+      if (!b.value)
         throw new Error("Callback is not defined or invalid");
-      const s = await T.value({ ...t });
-      if (s != null && s.rows && s.totalRows)
-        return s.rows.forEach((a) => {
-          a.ST_UID = Y(a);
+      let u = {};
+      try {
+        u = await b.value({ ...o });
+      } catch (y) {
+        throw console.log(y), new Error("Callback response is invalid or errored - ");
+      }
+      if (u != null && u.rows && u.totalRows !== void 0)
+        return u.rows.forEach((y) => {
+          y.ST_UID = J(y), e.value.checkboxes[y.ST_UID] = !1;
         }), {
-          rows: s.rows,
-          totalItems: s.totalRows
+          rows: u.rows,
+          totalRows: u.totalRows
         };
       throw new Error("Callback response is invalid or errored");
-    }, f = async () => {
-      const { page: t, rowsPerPage: s, ordering: a, filters: r, prevFilters: w } = e.value, { sortBy: A, sortType: M } = a, j = {
-        page: t,
-        rowsPerPage: s,
-        sortBy: A,
-        sortType: M
-      };
-      r.length > 0 && (j.filters = r, (r.length !== w.length || r.join("|") !== w.join("|")) && (j.page = 1, e.value.page = 1), e.value.prevFilters = [...r]);
-      const ee = await o(j);
-      _.value = ee.rows, e.value.totalItems = ee.totalItems;
-    }, k = () => {
-      const { sortBy: t, sortType: s } = e.value.ordering;
-      P.value.sort((a, r) => {
-        const w = b.castToType(a[t]), A = b.castToType(r[t]);
-        return w < A ? s === "asc" ? -1 : 1 : w > A ? s === "asc" ? 1 : -1 : 0;
-      });
-    }, u = () => {
-      const t = e.value.filters;
-      if (t.length === 0) {
-        _.value = P.value, e.value.totalItems = _.value.length;
-        return;
-      }
-      let s = P.value.filter((a) => {
-        const r = Object.values(a).join("|").toLowerCase();
-        let w = 0;
-        for (const A of t) {
-          const M = r.includes(A.toLowerCase());
-          w += M ? 1 : 0;
-        }
-        return w === t.length;
-      });
-      _.value = s, e.value.totalItems = _.value.length;
-    }, i = () => {
-      const { page: t, rowsPerPage: s } = e.value;
-      _.value = _.value.slice((t - 1) * s, t * s);
-    }, R = () => {
-      const { page: t, rowsPerPage: s, totalItems: a } = e.value;
-      e.value.startIndex = (t - 1) * s + 1, e.value.endIndex = Math.min(t * s, a);
-    }, E = (t) => ({
-      width: t.width ? `${t.width}px` : "auto"
-    }), K = l(() => e.value.loading), re = l(() => e.value.columns), ce = l(() => e.value.selectorColIdentifier), ue = l(() => e.value.allSelected), ie = l(() => [
+    }, h = () => {
+      const { page: o, rowsPerPage: u } = e.value;
+      e.value.startIndex = (o - 1) * u + 1, e.value.endIndex = Math.min(o * u, c.getTotalRows());
+    }, g = (o) => ({
+      width: o.width ? `${o.width}px` : "auto"
+    }), p = r(() => e.value.loading), T = r(() => e.value.columns), U = r(() => e.value.selectorColIdentifier), D = r(() => [
       "slottedtable",
-      b.getStyle("container")
-    ]), J = l(() => [
+      c.getStyle("container")
+    ]), w = r(() => [
       "st-body",
-      b.getStyle("body")
-    ]), Z = l(() => [
+      c.getStyle("body")
+    ]), $ = r(() => [
       "st-row",
-      b.getStyle("row")
-    ]), G = l(() => [
-      "st-cell",
-      b.getStyle("cell")
-    ]), de = l(() => [
+      c.getStyle("row")
+    ]), F = (o) => {
+      const u = ["st-cell", c.getStyle("cell")];
+      return o && o.value === U.value && u.push("w30"), u;
+    }, se = r(() => [
       "st-footer",
-      b.getStyle("footer")
-    ]), Q = () => {
-      const t = document.querySelectorAll(".st-row-selector:checked"), s = document.querySelectorAll(".st-row-selector");
-      return t.length === s.length;
-    }, X = async () => {
-      const { selection: t, allSelected: s, ordering: a } = e.value;
-      if (s)
-        if ($.value) {
-          const A = {
-            sortBy: a.sortBy,
-            sortType: a.sortType,
+      c.getStyle("footer")
+    ]), K = async () => {
+      const { allSelected: o, ordering: u, rowsPerPage: y } = e.value;
+      if (e.value.hasServerCallback) {
+        if (o) {
+          const P = {
+            sortBy: u.sortBy,
+            sortType: u.sortType,
             page: 1,
-            rowsPerPage: "all"
+            rowsPerPage: y,
+            all: !0
           };
-          return (await o(A)).rows;
-        } else
-          return P.value;
-      const r = _.value.filter(
-        (A) => t.indexOf(A.ST_UID) !== -1
-      ), w = [];
-      return r.forEach((A) => {
-        const M = { ...A };
-        delete M.ST_UID, w.push(M);
-      }), w;
-    }, V = async () => {
-      const t = await X();
-      d("updateSelection", { ...t });
-    }, ve = (t) => {
-      const s = { ...t };
-      delete s.ST_UID, d("rowClick", s);
-    }, pe = (t) => {
-      const { selection: s } = e.value, a = document.querySelector("#st-select-all"), r = t.target;
-      if (r) {
-        if (!r.checked) {
-          e.value.selection = s.filter(
-            (w) => w !== r.id
-          ), Q() || (a.checked = !1, e.value.allSelected = !1);
-          return;
+          return (await f(P)).rows;
         }
-        e.value.selection.push(r.id), Q() && (a.checked = !0, e.value.allSelected = !1), V();
+        return N.returnSelectedDynamic();
       }
-    }, fe = (t) => e.value.allSelected ? !0 : e.value.selection.indexOf(t) !== -1, Y = (t) => {
-      const s = JSON.stringify(t, Object.keys(t).sort());
-      let a = Date.now() - Math.random();
-      for (let w = 0; w < s.length; w++)
-        a = a * 33 ^ s.charCodeAt(w);
-      return (a >>> 0).toString(16);
+      return N.returnSelectedStatic();
+    }, le = async () => {
+      c.setDisplayRowSelected(), await z();
+    }, z = async () => {
+      const o = await K();
+      I("updateSelection", [...o]);
+    }, ae = (o) => {
+      const u = { ...o };
+      delete u.ST_UID, I("rowClick", u);
+    }, J = (o) => {
+      const u = JSON.stringify(o, Object.keys(o).sort());
+      let y = Date.now() - Math.random();
+      for (let B = 0; B < u.length; B++)
+        y = y * 33 ^ u.charCodeAt(B);
+      return (y >>> 0).toString(16);
     };
-    me(async () => {
-      e.value.selectorColIdentifier = `${Date.now()}-${Math.random().toString(36)}`, e.value.trs = p, e.value.language = B.value, U.value && x.value.unshift({
+    ie(async () => {
+      e.value.selectorColIdentifier = `${Date.now()}-${Math.random().toString(36)}`, e.value.trs = R, e.value.language = _.value, m.value && n.value.unshift({
         text: "",
         value: e.value.selectorColIdentifier,
         sortable: !1
-      }), e.value.columns = x.value, e.value.styles = D.value, e.value.selector = U.value, $.value = !!T.value, $.value || (I.value.forEach((t) => {
-        t.ST_UID = Y(t);
-      }), P.value = I.value, e.value.totalItems = P.value.length), await z();
+      }), e.value.columns = n.value, e.value.styles = x.value, e.value.hasCheckboxSelector = m.value, e.value.hasServerCallback = !!b.value, e.value.hasServerCallback || (v.value.forEach((o) => {
+        o.ST_UID = J(o), e.value.checkboxes[o.ST_UID] = !1;
+      }), e.value.staticRows.rows = v.value, e.value.staticRows.total = v.value.length), await M();
     });
-    const z = async (t = null) => {
-      if (e.value.loading = !0, $.value ? await f() : (k(), u(), i()), R(), t != null && t.clearSelected) {
-        const s = document.querySelector(
-          "#st-select-all"
-        );
-        s && (s.checked = !1), e.value.selection = [];
-      }
-      e.value.loading = !1;
+    const M = async (o = {}) => {
+      e.value.loading = !0, e.value.hasServerCallback ? await N.loadServerData(f) : (o != null && o.resetPage && (e.value.page = 1), N.loadStaticData()), h(), o != null && o.clearSelected && c.resetCheckboxes(), e.value.loading = !1;
     };
-    return y({ reloadTable: z, getSelection: async () => await X() }), (t, s) => (n(), c("div", {
-      class: S(ie.value)
+    return s({ reloadTable: M, getSelection: async () => [...await K()], resetSelection: () => {
+      const o = Object.keys(e.value.checkboxes);
+      for (let u = 0; u < o.length; u += 1)
+        e.value.checkboxes[o[u]] = !1;
+    } }), (o, u) => (i(), d("div", {
+      class: S(D.value)
     }, [
-      H(qe, {
-        onUpdate: z,
-        onUpdateSelection: V
+      H(Fe, {
+        onUpdate: M,
+        onUpdateSelection: z
       }),
-      K.value || !_.value.length ? (n(), c("div", {
+      p.value || !E(c).getTotalRows() ? (i(), d("div", {
         key: 0,
-        class: S(J.value)
+        class: S(w.value)
       }, [
-        m("div", {
-          class: S(Z.value)
+        k("div", {
+          class: S($.value)
         }, [
-          m("div", {
-            class: S(G.value)
+          k("div", {
+            class: S(F)
           }, [
-            K.value ? (n(), oe(Ne, {
+            p.value ? (i(), Y(Ue, {
               key: 0,
-              text: p.value.pleaseWait
-            }, null, 8, ["text"])) : (n(), c("span", Ve, C(p.value.noResults), 1))
-          ], 2)
+              text: R.value.pleaseWait
+            }, null, 8, ["text"])) : (i(), d("span", ze, C(R.value.noResults), 1))
+          ])
         ], 2)
-      ], 2)) : (n(), c("div", {
+      ], 2)) : (i(), d("div", {
         key: 1,
-        class: S(J.value)
+        class: S(w.value)
       }, [
-        H($e, {
-          onUpdate: z,
-          onUpdateSelection: V
+        H(me, {
+          onUpdate: M,
+          onUpdateSelection: z
         }),
-        (n(!0), c(F, null, L(_.value, (a) => (n(), c("div", {
-          key: a.ST_UID,
-          class: S(Z.value)
+        (i(!0), d(A, null, L(E(c).getRows(), (y) => (i(), d("div", {
+          key: y.ST_UID,
+          class: S($.value)
         }, [
-          (n(!0), c(F, null, L(re.value, (r) => (n(), c("div", {
-            key: `${a.ST_UID}-${r.value}`,
-            class: S(G.value),
-            style: ae(E(r)),
-            onClick: (w) => ve(a)
+          (i(!0), d(A, null, L(T.value, (P) => (i(), d("div", {
+            key: `${y.ST_UID}-${P.value}`,
+            class: S(F(P)),
+            style: X(g(P)),
+            onClick: (B) => ae(y)
           }, [
-            r.value === ce.value ? (n(), c("div", He, [
-              m("input", {
-                id: a.ST_UID,
+            P.value === U.value ? (i(), d("div", We, [
+              q(k("input", {
+                id: y.ST_UID,
                 class: "st-row-selector",
                 type: "checkbox",
-                checked: fe(a.ST_UID),
-                onChange: pe,
-                disabled: ue.value
-              }, null, 40, We)
-            ])) : te(t.$slots, r.value, {
+                "onUpdate:modelValue": (B) => E(e).checkboxes[y.ST_UID] = B,
+                onChange: le
+              }, null, 40, qe), [
+                [ue, E(e).checkboxes[y.ST_UID]]
+              ])
+            ])) : Z(o.$slots, P.value, {
               key: 1,
-              column: r.value,
-              cellData: a[r.value] || r.empty,
-              data: a
+              column: P.value,
+              cellData: y[P.value] || P.empty,
+              data: y
             }, () => [
-              te(t.$slots, "default", {
-                column: r.value,
-                cellData: a[r.value] || r.empty,
-                data: a
+              Z(o.$slots, "default", {
+                column: P.value,
+                cellData: y[P.value] || P.empty,
+                data: y
               }, void 0, !0)
             ], !0)
-          ], 14, je))), 128))
+          ], 14, He))), 128))
         ], 2))), 128))
       ], 2)),
-      m("div", {
-        class: S(de.value)
+      k("div", {
+        class: S(se.value)
       }, [
-        H(Ue, { onUpdate: z })
+        H(Re, { onUpdate: M })
       ], 2)
     ], 2));
   }
-}), Je = (v, y) => {
-  const g = v.__vccOpts || v;
-  for (const [h, x] of y)
-    g[h] = x;
-  return g;
-}, Ze = /* @__PURE__ */ Je(Ke, [["__scopeId", "data-v-7b719e9c"]]);
+}), Je = (t, s) => {
+  const l = t.__vccOpts || t;
+  for (const [a, n] of s)
+    l[a] = n;
+  return l;
+}, Ze = /* @__PURE__ */ Je(Ke, [["__scopeId", "data-v-3d6ced3f"]]);
 typeof window < "u" && window.Vue && window.Vue.createApp({}).component("SlottedTable", Ze);
 export {
   Ze as default
