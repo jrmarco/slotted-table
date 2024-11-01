@@ -1,4 +1,4 @@
-import { ref as j, defineComponent as O, computed as r, openBlock as i, createElementBlock as d, normalizeClass as S, Fragment as A, renderList as L, normalizeStyle as X, createTextVNode as V, toDisplayString as C, createElementVNode as k, withDirectives as q, vModelSelect as oe, unref as E, createCommentVNode as W, withKeys as re, vModelText as ne, createBlock as Y, toRefs as ce, onMounted as ie, createVNode as H, vModelCheckbox as ue, renderSlot as Z } from "vue";
+import { ref as N, defineComponent as O, computed as r, openBlock as i, createElementBlock as d, normalizeClass as S, Fragment as A, renderList as L, normalizeStyle as X, createTextVNode as V, toDisplayString as C, createElementVNode as k, withDirectives as q, vModelSelect as oe, unref as E, createCommentVNode as W, withKeys as re, vModelText as ne, createBlock as Y, toRefs as ce, onMounted as ie, createVNode as H, vModelCheckbox as ue, renderSlot as Z } from "vue";
 const de = {
   pleaseWait: "Caricamento",
   noResults: "Nessun risultato",
@@ -57,14 +57,14 @@ const de = {
     default:
       return G;
   }
-}, e = j({
+}, e = N({
   language: "en",
   trs: {},
   loading: !0,
   columns: [],
   ordering: {
-    sortBy: "id",
-    sortType: "desc"
+    sortBy: "",
+    sortType: ""
   },
   startIndex: 1,
   endIndex: 1,
@@ -92,7 +92,7 @@ const de = {
   const { styles: s } = e.value;
   if (!Object.keys(s).length)
     return "";
-  function l(a) {
+  function a(o) {
     return [
       "container",
       "header",
@@ -107,18 +107,18 @@ const de = {
       "activefilter",
       "searchbutton",
       "filterbutton"
-    ].includes(a);
+    ].includes(o);
   }
-  return l(t) && s[t] || "";
+  return a(t) && s[t] || "";
 }, Q = (t) => {
   const s = new Date(t);
   return !isNaN(s.getTime()) && t === s.toISOString().split("T")[0] ? s.getTime() : !1;
 }, ge = (t) => isNaN(Number(t)) ? Q(t) ? Q(t) : t : Number(t), ee = () => {
-  const { hasServerCallback: t, dynamicRows: s, staticRows: l } = e.value;
-  return t ? s.rows : l.filtered;
+  const { hasServerCallback: t, dynamicRows: s, staticRows: a } = e.value;
+  return t ? s.rows : a.filtered;
 }, ye = () => {
-  const { hasServerCallback: t, dynamicRows: s, staticRows: l } = e.value;
-  return t ? s.total : l.filteredTotal;
+  const { hasServerCallback: t, dynamicRows: s, staticRows: a } = e.value;
+  return t ? s.total : a.filteredTotal;
 }, te = () => {
   Object.keys(e.value.checkboxes).forEach((s) => {
     e.value.checkboxes[s] = !1;
@@ -127,12 +127,12 @@ const de = {
   const t = [];
   e.value.allSelected = !1;
   const s = Object.keys(e.value.checkboxes);
-  for (let a = 0; a < s.length; a += 1)
-    e.value.checkboxes[s[a]] && t.push(s[a]);
+  for (let o = 0; o < s.length; o += 1)
+    e.value.checkboxes[s[o]] && t.push(s[o]);
   te();
-  const l = ee().map((a) => a.ST_UID);
-  t.forEach((a) => {
-    l.indexOf(a) !== -1 && (e.value.checkboxes[a] = !0);
+  const a = ee().map((o) => o.ST_UID);
+  t.forEach((o) => {
+    a.indexOf(o) !== -1 && (e.value.checkboxes[o] = !0);
   });
 }, c = {
   getStyle: he,
@@ -141,27 +141,27 @@ const de = {
   getTotalRows: ye,
   resetCheckboxes: te,
   setDisplayRowSelected: we
-}, Se = ["onClick", "title"], ke = { key: 0 }, be = ["innerHTML"], _e = ["title"], me = /* @__PURE__ */ O({
+}, Se = ["onClick", "title"], ke = { key: 0 }, be = ["innerHTML"], me = ["title"], _e = /* @__PURE__ */ O({
   __name: "TableHeader",
   emits: ["update", "updateSelection"],
   setup(t, { emit: s }) {
-    const l = s, a = r(() => e.value.columns), n = r(() => e.value.selectorColIdentifier), v = r(() => e.value.trs), x = r(() => [
+    const a = s, o = r(() => e.value.columns), u = r(() => e.value.selectorColIdentifier), v = r(() => e.value.trs), x = r(() => [
       "st-row",
       "st-header",
       c.getStyle("row"),
       c.getStyle("header")
-    ]), _ = (f) => {
+    ]), m = (f) => {
       const h = [
         "st-cell",
         f.sortable ? "st-pointer" : "",
         c.getStyle("cell")
       ];
-      return f.value === n.value && h.push("w30"), h;
+      return f.value === u.value && h.push("w30"), h;
     }, b = (f) => {
       if (!f || !f.value || !f.sortable) return;
       const { sortBy: h, sortType: g } = e.value.ordering;
-      e.value.ordering.sortType = h === f.value && g === "asc" ? "desc" : "asc", e.value.ordering.sortBy = f.value, l("update");
-    }, m = (f) => ({
+      e.value.ordering.sortType = h === f.value && g === "asc" ? "desc" : "asc", e.value.ordering.sortBy = f.value, a("update");
+    }, _ = (f) => ({
       width: f.width ? `${f.width}px` : "auto"
     }), R = (f) => {
       const { sortBy: h, sortType: g } = e.value.ordering;
@@ -174,19 +174,19 @@ const de = {
       }
       f.forEach((h) => {
         e.value.checkboxes[h.ST_UID] = !e.value.checkboxes[h.ST_UID];
-      }), l("updateSelection");
+      }), a("updateSelection");
     };
     return (f, h) => (i(), d("div", {
       class: S(x.value)
     }, [
-      (i(!0), d(A, null, L(a.value, (g, p) => (i(), d("div", {
+      (i(!0), d(A, null, L(o.value, (g, p) => (i(), d("div", {
         key: g.value || p,
         onClick: (T) => b(g),
-        class: S(_(g)),
-        style: X(m(g)),
+        class: S(m(g)),
+        style: X(_(g)),
         title: g.text
       }, [
-        g.value !== n.value ? (i(), d("b", ke, [
+        g.value !== u.value ? (i(), d("b", ke, [
           V(C(g.text) + " ", 1),
           k("span", {
             innerHTML: R(g.value)
@@ -196,7 +196,7 @@ const de = {
           class: "st-select-all",
           onClick: I,
           title: v.value.selectCurrentPageElement
-        }, " ☑️ ", 8, _e))
+        }, " ☑️ ", 8, me))
       ], 14, Se))), 128))
     ], 2));
   }
@@ -204,7 +204,7 @@ const de = {
   __name: "TableFooter",
   emits: ["update"],
   setup(t, { emit: s }) {
-    const l = s, a = r(() => [5, 10, 25, 50]), n = r(() => {
+    const a = s, o = r(() => [5, 10, 25, 50]), u = r(() => {
       const { rowsPerPage: h, page: g } = e.value;
       if (!c.getTotalRows()) return [];
       const p = Math.ceil(c.getTotalRows() / h), T = g;
@@ -219,8 +219,8 @@ const de = {
       set(h) {
         e.value.rowsPerPage = h;
       }
-    }), x = r(() => e.value.startIndex), _ = r(() => e.value.endIndex), b = r(() => e.value.page), m = async (h) => {
-      !Number.isInteger(h) || h < 1 || (e.value.page = h, l("update", { clearSelected: !0 }));
+    }), x = r(() => e.value.startIndex), m = r(() => e.value.endIndex), b = r(() => e.value.page), _ = async (h) => {
+      !Number.isInteger(h) || h < 1 || (e.value.page = h, a("update", { clearSelected: !0 }));
     }, R = r(() => e.value.trs), I = r(() => ["st-pageselector", c.getStyle("pageselector")]), f = r(() => ["st-pagebtns", c.getStyle("pagebtns")]);
     return (h, g) => (i(), d(A, null, [
       k("div", {
@@ -231,9 +231,9 @@ const de = {
           name: "st-rows-per-page-selector",
           class: "st-select",
           "onUpdate:modelValue": g[0] || (g[0] = (p) => v.value = p),
-          onChange: g[1] || (g[1] = (p) => m(1))
+          onChange: g[1] || (g[1] = (p) => _(1))
         }, [
-          (i(!0), d(A, null, L(a.value, (p) => (i(), d("option", {
+          (i(!0), d(A, null, L(o.value, (p) => (i(), d("option", {
             key: p,
             value: p
           }, C(p), 9, Ce))), 128))
@@ -241,16 +241,16 @@ const de = {
           [oe, v.value]
         ])
       ], 2),
-      k("div", null, C(x.value) + "-" + C(_.value) + " " + C(R.value.of) + " " + C(E(c).getTotalRows() || 0), 1),
+      k("div", null, C(x.value) + "-" + C(m.value) + " " + C(R.value.of) + " " + C(E(c).getTotalRows() || 0), 1),
       E(c).getTotalRows() > v.value ? (i(), d("div", {
         key: 0,
         class: S(f.value)
       }, [
-        (i(!0), d(A, null, L(n.value, (p) => (i(), d(A, { key: p }, [
+        (i(!0), d(A, null, L(u.value, (p) => (i(), d(A, { key: p }, [
           typeof p == "number" ? (i(), d("button", {
             key: 0,
             class: S({ "st-active": Number(p) === Number(b.value) }),
-            onClick: (T) => m(p)
+            onClick: (T) => _(p)
           }, C(p), 11, xe)) : (i(), d("span", Te, "  "))
         ], 64))), 128))
       ], 2)) : W("", !0)
@@ -300,7 +300,7 @@ const de = {
     }
   },
   setup(t) {
-    return (s, l) => (i(), d("svg", Pe, [
+    return (s, a) => (i(), d("svg", Pe, [
       De,
       k("text", Ie, C(t.text), 1)
     ]));
@@ -309,41 +309,41 @@ const de = {
   __name: "BulkSelection",
   emits: ["updateSelection"],
   setup(t, { emit: s }) {
-    const l = r(() => e.value.trs), a = r(() => [
+    const a = r(() => e.value.trs), o = r(() => [
       "st-bulkactions",
       c.getStyle("bulkactions")
-    ]), n = r(() => l.value.selectAll), v = r(() => {
-      const { hasServerCallback: b, checkboxes: m, dynamicRows: R, staticRows: I } = e.value, f = Object.values(m).filter((h) => h);
+    ]), u = r(() => a.value.selectAll), v = r(() => {
+      const { hasServerCallback: b, checkboxes: _, dynamicRows: R, staticRows: I } = e.value, f = Object.values(_).filter((h) => h);
       return e.value.allSelected ? b ? R.total : I.total : f.length;
-    }), x = s, _ = () => {
+    }), x = s, m = () => {
       e.value.allSelected = !0;
-      const { hasServerCallback: b, dynamicRows: m, staticRows: R } = e.value;
-      (b ? m.rows : R.rows).forEach((f) => {
+      const { hasServerCallback: b, dynamicRows: _, staticRows: R } = e.value;
+      (b ? _.rows : R.rows).forEach((f) => {
         e.value.checkboxes[f.ST_UID] = !0;
       }), x("updateSelection");
     };
-    return (b, m) => (i(), d("div", {
-      class: S(a.value)
+    return (b, _) => (i(), d("div", {
+      class: S(o.value)
     }, [
-      k("p", null, C(l.value.bulkActions) + ":", 1),
+      k("p", null, C(a.value.bulkActions) + ":", 1),
       k("p", null, C(v.value), 1),
-      k("button", { onClick: _ }, C(n.value), 1)
+      k("button", { onClick: m }, C(u.value), 1)
     ], 2));
   }
 }), Ae = ["disabled"], Be = ["data-key"], Fe = /* @__PURE__ */ O({
   __name: "FilterComponent",
   emits: ["update", "updateSelection"],
   setup(t, { emit: s }) {
-    const l = r(() => e.value.trs), a = j(""), n = j([]), v = s, x = r(() => [
+    const a = r(() => e.value.trs), o = N(""), u = N([]), v = s, x = r(() => [
       "st-filtercontainer",
       c.getStyle("filter")
-    ]), _ = r(() => [
+    ]), m = r(() => [
       "st-filteractions",
       c.getStyle("filteractions")
     ]), b = r(() => [
       "st-activefilter",
       c.getStyle("activefilter")
-    ]), m = r(() => [
+    ]), _ = r(() => [
       "st-searchbutton",
       c.getStyle("searchbutton")
     ]), R = r(() => [
@@ -358,17 +358,17 @@ const de = {
       return w = w.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), w = w.replace(/[^a-z0-9]/g, "-").trim(), w;
     }, p = () => {
       const D = e.value.filters || [];
-      if (a.value === "" || h.value <= 0)
+      if (o.value === "" || h.value <= 0)
         return;
-      const w = g(a.value);
+      const w = g(o.value);
       if (!D || D.length === 0) {
-        D || (e.value.filters = []), c.resetCheckboxes(), e.value.filters.push(a.value), n.value.push(w), v("update", { resetPage: !0 }), a.value = "";
+        D || (e.value.filters = []), c.resetCheckboxes(), e.value.filters.push(o.value), u.value.push(w), v("update", { resetPage: !0 }), o.value = "";
         return;
       }
-      n.value.indexOf(w) === -1 && (c.resetCheckboxes(), e.value.filters.push(a.value), n.value.push(w), v("update", { resetPage: !0 }), a.value = "");
+      u.value.indexOf(w) === -1 && (c.resetCheckboxes(), e.value.filters.push(o.value), u.value.push(w), v("update", { resetPage: !0 }), o.value = "");
     }, T = (D) => {
       const w = D.target, $ = w.getAttribute("data-key") || "";
-      n.value = n.value.filter(
+      u.value = u.value.filter(
         (F) => F !== $
       ), e.value.filters = e.value.filters.filter(
         (F) => F !== w.innerHTML
@@ -379,23 +379,23 @@ const de = {
         class: S(x.value)
       }, [
         k("div", {
-          class: S(_.value)
+          class: S(m.value)
         }, [
-          V(C(l.value.filter) + " ", 1),
+          V(C(a.value.filter) + " ", 1),
           q(k("input", {
             id: "st-text-search",
             type: "text",
             onKeyup: re(p, ["enter"]),
-            "onUpdate:modelValue": w[0] || (w[0] = ($) => a.value = $),
+            "onUpdate:modelValue": w[0] || (w[0] = ($) => o.value = $),
             autocomplete: "on"
           }, null, 544), [
-            [ne, a.value]
+            [ne, o.value]
           ]),
           k("button", {
-            class: S(m.value),
+            class: S(_.value),
             onClick: p,
             disabled: h.value <= 0
-          }, C(l.value.search), 11, Ae)
+          }, C(a.value.search), 11, Ae)
         ], 2),
         f.value ? (i(), Y($e, {
           key: 0,
@@ -406,7 +406,7 @@ const de = {
         key: 0,
         class: S(b.value)
       }, [
-        V(C(l.value.activefilters) + " ", 1),
+        V(C(a.value.activefilters) + " ", 1),
         (i(!0), d(A, null, L(I.value, ($) => (i(), d("button", {
           class: S(R.value),
           key: g($),
@@ -417,10 +417,10 @@ const de = {
     ], 64));
   }
 }), Ee = () => {
-  const { staticRows: t, ordering: s } = e.value, { sortBy: l, sortType: a } = s;
-  t.rows.sort((n, v) => {
-    const x = c.castToType(n[l]), _ = c.castToType(v[l]);
-    return x < _ ? a === "asc" ? -1 : 1 : x > _ ? a === "asc" ? 1 : -1 : 0;
+  const { staticRows: t, ordering: s } = e.value, { sortBy: a, sortType: o } = s;
+  t.rows.sort((u, v) => {
+    const x = c.castToType(u[a]), m = c.castToType(v[a]);
+    return x < m ? o === "asc" ? -1 : 1 : x > m ? o === "asc" ? 1 : -1 : 0;
   });
 }, Le = () => {
   const { filters: t, staticRows: s } = e.value;
@@ -428,50 +428,50 @@ const de = {
     e.value.staticRows.filtered = s.rows, e.value.staticRows.filteredTotal = s.rows.length;
     return;
   }
-  const l = s.rows.filter((a) => {
-    const n = Object.values(a).join("|").toLowerCase();
+  const a = s.rows.filter((o) => {
+    const u = Object.values(o).join("|").toLowerCase();
     let v = 0;
     for (const x of t) {
-      const _ = n.includes(x.toLowerCase());
-      v += _ ? 1 : 0;
+      const m = u.includes(x.toLowerCase());
+      v += m ? 1 : 0;
     }
     return v === t.length;
   });
-  e.value.staticRows.filtered = l, e.value.staticRows.filteredTotal = l.length;
+  e.value.staticRows.filtered = a, e.value.staticRows.filteredTotal = a.length;
 }, Oe = () => {
-  const { page: t, rowsPerPage: s, staticRows: l } = e.value;
-  e.value.staticRows.filtered = l.filtered.slice(
+  const { page: t, rowsPerPage: s, staticRows: a } = e.value;
+  e.value.staticRows.filtered = a.filtered.slice(
     (t - 1) * s,
     t * s
   );
 }, Me = () => {
   Ee(), Le(), Oe();
-}, Ne = async (t) => {
-  const { page: s, rowsPerPage: l, ordering: a, filters: n, prevFilters: v } = e.value, { sortBy: x, sortType: _ } = a, b = {
+}, je = async (t) => {
+  const { page: s, rowsPerPage: a, ordering: o, filters: u, prevFilters: v } = e.value, { sortBy: x, sortType: m } = o, b = {
     page: s,
-    rowsPerPage: l,
+    rowsPerPage: a,
     sortBy: x,
-    sortType: _
+    sortType: m
   };
-  n.length > 0 ? (b.filters = n, (n.length !== v.length || n.join("|") !== v.join("|")) && (e.value.page = 1, b.page = 1), e.value.prevFilters = [...n]) : e.value.prevFilters = [];
-  const m = await t(b);
-  e.value.dynamicRows.rows = m.rows, e.value.dynamicRows.total = m.totalRows;
-}, je = () => {
+  u.length > 0 ? (b.filters = u, (u.length !== v.length || u.join("|") !== v.join("|")) && (e.value.page = 1, b.page = 1), e.value.prevFilters = [...u]) : e.value.prevFilters = [];
+  const _ = await t(b);
+  e.value.dynamicRows.rows = _.rows, e.value.dynamicRows.total = _.totalRows;
+}, Ne = () => {
   const { dynamicRows: t } = e.value;
   return t.rows.filter((s) => e.value.checkboxes[s.ST_UID]).map((s) => {
-    const l = { ...s };
-    return delete l.ST_UID, l;
+    const a = { ...s };
+    return delete a.ST_UID, a;
   });
 }, Ve = () => {
-  const { checkboxes: t, allSelected: s, staticRows: l } = e.value;
-  return (s ? l.rows : l.filtered).filter((n) => t[n.ST_UID]).map((n) => {
-    const v = { ...n };
+  const { checkboxes: t, allSelected: s, staticRows: a } = e.value;
+  return (s ? a.rows : a.filtered).filter((u) => t[u.ST_UID]).map((u) => {
+    const v = { ...u };
     return delete v.ST_UID, v;
   });
-}, N = {
+}, j = {
   loadStaticData: Me,
-  loadServerData: Ne,
-  returnSelectedDynamic: je,
+  loadServerData: je,
+  returnSelectedDynamic: Ne,
   returnSelectedStatic: Ve
 }, ze = { key: 1 }, He = ["onClick"], We = { key: 0 }, qe = ["id", "onUpdate:modelValue"], Ke = /* @__PURE__ */ O({
   __name: "SlottedTable",
@@ -481,6 +481,10 @@ const de = {
       default: () => [],
       required: !0
     },
+    baseFilter: {
+      type: Object,
+      default: () => ({ name: "", direction: "" })
+    },
     selector: { type: Boolean, default: !1 },
     items: { type: Array, default: () => [] },
     styles: { type: Object, default: () => ({}) },
@@ -489,29 +493,29 @@ const de = {
     callBack: { type: Function, default: null }
   },
   emits: ["updateSelection", "rowClick"],
-  setup(t, { expose: s, emit: l }) {
-    const a = t, { headers: n, items: v, styles: x, language: _, callBack: b, selector: m } = ce(a), R = j(pe(_.value)), I = l, f = async (o) => {
+  setup(t, { expose: s, emit: a }) {
+    const o = t, { headers: u, items: v, styles: x, language: m, callBack: b, selector: _ } = ce(o), R = N(pe(m.value)), I = a, f = async (l) => {
       if (!b.value)
         throw new Error("Callback is not defined or invalid");
-      let u = {};
+      let n = {};
       try {
-        u = await b.value({ ...o });
+        n = await b.value({ ...l });
       } catch (y) {
         throw console.log(y), new Error("Callback response is invalid or errored - ");
       }
-      if (u != null && u.rows && u.totalRows !== void 0)
-        return u.rows.forEach((y) => {
+      if (n != null && n.rows && n.totalRows !== void 0)
+        return n.rows.forEach((y) => {
           y.ST_UID = J(y), e.value.checkboxes[y.ST_UID] = !1;
         }), {
-          rows: u.rows,
-          totalRows: u.totalRows
+          rows: n.rows,
+          totalRows: n.totalRows
         };
       throw new Error("Callback response is invalid or errored");
     }, h = () => {
-      const { page: o, rowsPerPage: u } = e.value;
-      e.value.startIndex = (o - 1) * u + 1, e.value.endIndex = Math.min(o * u, c.getTotalRows());
-    }, g = (o) => ({
-      width: o.width ? `${o.width}px` : "auto"
+      const { page: l, rowsPerPage: n } = e.value;
+      e.value.startIndex = (l - 1) * n + 1, e.value.endIndex = Math.min(l * n, c.getTotalRows());
+    }, g = (l) => ({
+      width: l.width ? `${l.width}px` : "auto"
     }), p = r(() => e.value.loading), T = r(() => e.value.columns), U = r(() => e.value.selectorColIdentifier), D = r(() => [
       "slottedtable",
       c.getStyle("container")
@@ -521,60 +525,64 @@ const de = {
     ]), $ = r(() => [
       "st-row",
       c.getStyle("row")
-    ]), F = (o) => {
-      const u = ["st-cell", c.getStyle("cell")];
-      return o && o.value === U.value && u.push("w30"), u;
+    ]), F = (l) => {
+      const n = ["st-cell", c.getStyle("cell")];
+      return l && l.value === U.value && n.push("w30"), n;
     }, se = r(() => [
       "st-footer",
       c.getStyle("footer")
     ]), K = async () => {
-      const { allSelected: o, ordering: u, rowsPerPage: y } = e.value;
+      const { allSelected: l, ordering: n, rowsPerPage: y } = e.value;
       if (e.value.hasServerCallback) {
-        if (o) {
+        if (l) {
           const P = {
-            sortBy: u.sortBy,
-            sortType: u.sortType,
+            sortBy: n.sortBy,
+            sortType: n.sortType,
             page: 1,
             rowsPerPage: y,
             all: !0
           };
           return (await f(P)).rows;
         }
-        return N.returnSelectedDynamic();
+        return j.returnSelectedDynamic();
       }
-      return N.returnSelectedStatic();
+      return j.returnSelectedStatic();
     }, le = async () => {
       c.setDisplayRowSelected(), await z();
     }, z = async () => {
-      const o = await K();
-      I("updateSelection", [...o]);
-    }, ae = (o) => {
-      const u = { ...o };
-      delete u.ST_UID, I("rowClick", u);
-    }, J = (o) => {
-      const u = JSON.stringify(o, Object.keys(o).sort());
+      const l = await K();
+      I("updateSelection", [...l]);
+    }, ae = (l) => {
+      const n = { ...l };
+      delete n.ST_UID, I("rowClick", n);
+    }, J = (l) => {
+      const n = JSON.stringify(l, Object.keys(l).sort());
       let y = Date.now() - Math.random();
-      for (let B = 0; B < u.length; B++)
-        y = y * 33 ^ u.charCodeAt(B);
+      for (let B = 0; B < n.length; B++)
+        y = y * 33 ^ n.charCodeAt(B);
       return (y >>> 0).toString(16);
     };
     ie(async () => {
-      e.value.selectorColIdentifier = `${Date.now()}-${Math.random().toString(36)}`, e.value.trs = R, e.value.language = _.value, m.value && n.value.unshift({
+      if (e.value.selectorColIdentifier = `${Date.now()}-${Math.random().toString(36)}`, e.value.trs = R, e.value.language = m.value, _.value && u.value.unshift({
         text: "",
         value: e.value.selectorColIdentifier,
         sortable: !1
-      }), e.value.columns = n.value, e.value.styles = x.value, e.value.hasCheckboxSelector = m.value, e.value.hasServerCallback = !!b.value, e.value.hasServerCallback || (v.value.forEach((o) => {
-        o.ST_UID = J(o), e.value.checkboxes[o.ST_UID] = !1;
-      }), e.value.staticRows.rows = v.value, e.value.staticRows.total = v.value.length), await M();
+      }), e.value.columns = u.value, e.value.styles = x.value, e.value.hasCheckboxSelector = _.value, e.value.hasServerCallback = !!b.value, e.value.hasServerCallback || (v.value.forEach((l) => {
+        l.ST_UID = J(l), e.value.checkboxes[l.ST_UID] = !1;
+      }), e.value.staticRows.rows = v.value, e.value.staticRows.total = v.value.length), e.value.ordering.sortBy = "id", e.value.ordering.sortType = "desc", o.baseFilter) {
+        const { name: l, direction: n } = o.baseFilter;
+        l && n && l !== "" && (e.value.ordering.sortBy = l, e.value.ordering.sortType = n);
+      }
+      await M();
     });
-    const M = async (o = {}) => {
-      e.value.loading = !0, e.value.hasServerCallback ? await N.loadServerData(f) : (o != null && o.resetPage && (e.value.page = 1), N.loadStaticData()), h(), o != null && o.clearSelected && c.resetCheckboxes(), e.value.loading = !1;
+    const M = async (l = {}) => {
+      e.value.loading = !0, e.value.hasServerCallback ? await j.loadServerData(f) : (l != null && l.resetPage && (e.value.page = 1), j.loadStaticData()), h(), l != null && l.clearSelected && c.resetCheckboxes(), e.value.loading = !1;
     };
     return s({ reloadTable: M, getSelection: async () => [...await K()], resetSelection: () => {
-      const o = Object.keys(e.value.checkboxes);
-      for (let u = 0; u < o.length; u += 1)
-        e.value.checkboxes[o[u]] = !1;
-    } }), (o, u) => (i(), d("div", {
+      const l = Object.keys(e.value.checkboxes);
+      for (let n = 0; n < l.length; n += 1)
+        e.value.checkboxes[l[n]] = !1;
+    } }), (l, n) => (i(), d("div", {
       class: S(D.value)
     }, [
       H(Fe, {
@@ -601,7 +609,7 @@ const de = {
         key: 1,
         class: S(w.value)
       }, [
-        H(me, {
+        H(_e, {
           onUpdate: M,
           onUpdateSelection: z
         }),
@@ -625,18 +633,18 @@ const de = {
               }, null, 40, qe), [
                 [ue, E(e).checkboxes[y.ST_UID]]
               ])
-            ])) : Z(o.$slots, P.value, {
+            ])) : Z(l.$slots, P.value, {
               key: 1,
               column: P.value,
               cellData: y[P.value] || P.empty,
               data: y
             }, () => [
-              Z(o.$slots, "default", {
+              Z(l.$slots, "default", {
                 column: P.value,
                 cellData: y[P.value] || P.empty,
                 data: y
-              }, void 0, !0)
-            ], !0)
+              })
+            ])
           ], 14, He))), 128))
         ], 2))), 128))
       ], 2)),
@@ -647,13 +655,8 @@ const de = {
       ], 2)
     ], 2));
   }
-}), Je = (t, s) => {
-  const l = t.__vccOpts || t;
-  for (const [a, n] of s)
-    l[a] = n;
-  return l;
-}, Ze = /* @__PURE__ */ Je(Ke, [["__scopeId", "data-v-3d6ced3f"]]);
-typeof window < "u" && window.Vue && window.Vue.createApp({}).component("SlottedTable", Ze);
+});
+typeof window < "u" && window.Vue && window.Vue.createApp({}).component("SlottedTable", Ke);
 export {
-  Ze as default
+  Ke as default
 };

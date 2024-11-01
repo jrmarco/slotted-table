@@ -16,8 +16,9 @@ export default defineConfig({
       output: {
         globals: {
           vue: 'Vue'
-        }
-      }
+        },
+        assetFileNames: 'index.css'
+      },
     },
     cssCodeSplit: true,
   },

@@ -7,8 +7,8 @@ const store = ref<Store>({
   loading: true,
   columns: [],
   ordering: {
-    sortBy: "id",
-    sortType: "desc",
+    sortBy: "",
+    sortType: "",
   },
   startIndex: 1,
   endIndex: 1,

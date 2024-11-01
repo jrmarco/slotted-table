@@ -1,15 +1,9 @@
 {
   "name": "slotted-table",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Data table with slots ready made with Vue.js 3.x ready to use",
-  "main": "dist/slotted-table.umd.js",
   "type": "module",
-  "module": "dist/slotted-table.es.js",
-  "types": "./types/main.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist"],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -26,6 +20,17 @@
     "url": "git+https://github.com/jrmarco/slotted-table.git"
   },
   "license": "GPLv3",
+  "main": "./dist/slotted-table.umd.cjs",
+  "module": "./dist/slotted-table.es.js",
+  "types": "./types/main.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/slotted-table.es.js",
+      "require": "./dist/slotted-table.umd.cjs",
+      "types": "./types/main.d.ts"
+    },
+    "./dist/index.css": "./dist/index.css"
+  },
   "dependencies": {
     "vue": "^3.4.35"
   },

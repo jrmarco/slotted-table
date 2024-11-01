@@ -91,6 +91,12 @@ const props = defineProps({
     default: () => [],
     required: true,
   },
+  baseFilter: {
+    type: Object,
+    default: () => {
+      return { name: "", direction: "" };
+    },
+  },
   selector: { type: Boolean, default: false },
   items: { type: Array as () => TItem[], default: () => [] },
   styles: { type: Object as () => TStyles, default: () => ({}) },
@@ -340,6 +346,16 @@ onMounted(async () => {
     store.value.staticRows.total = items.value.length;
   }
 
+  store.value.ordering.sortBy = "id";
+  store.value.ordering.sortType = "desc";
+  if (props.baseFilter) {
+    const { name, direction } = props.baseFilter;
+    if (name && direction && name !== '') {
+      store.value.ordering.sortBy = name;
+      store.value.ordering.sortType = direction;
+    }
+  }
+
   await reloadTable();
 });
 
@@ -403,6 +419,6 @@ const resetSelection = () => {
 defineExpose({ reloadTable, getSelection, resetSelection });
 </script>
 
-<style scoped>
+<style>
 @import "./assets/main.css";
 </style>
